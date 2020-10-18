@@ -3,6 +3,17 @@
 
 This is a fork copy of Ansible, used for the purpose of Lab exercises in Software Quality and Standards (IDY0204) course.
 
+Developer guide on how to run unit tests can be found [here](https://docs.ansible.com/ansible/devel/dev_guide/testing_units.html#testing-units)
+
+To run unit test:
+$ cd ansible
+$ source ./hacking/env-setup
+
+Run any test by specifying the path. ie.:
+$ ansible-test units --docker -v test/units/module_utils/basic/test_imports.py
+The command will call for python2, so make sure you have python2 in your environment
+
+
 *******
 Ansible
 *******
