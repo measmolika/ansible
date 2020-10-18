@@ -1,5 +1,8 @@
 |PyPI version| |Docs badge| |Chat badge| |Build Status| |Code Of Conduct| |Mailing Lists| |License| |CII Best Practices|
 
+
+This is a fork copy of Ansible, used for the purpose of Lab exercises in Software Quality and Standards (IDY0204) course.
+
 *******
 Ansible
 *******
