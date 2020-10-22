@@ -41,3 +41,12 @@ class ConfigData(object):
             if plugin.name not in self._plugins[plugin.type]:
                 self._plugins[plugin.type][plugin.name] = {}
             self._plugins[plugin.type][plugin.name][setting.name] = setting
+
+
+    def get_conf_setting(self, name):
+        setting = self._global_settings.get(name)
+        return setting
+
+    def update_conf_setting(self, setting):
+        name = setting.name
+        self._global_settings[name] = setting
