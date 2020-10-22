@@ -11,7 +11,8 @@ from ansible.config.manager import Setting
 mykey = Setting('mykey', 'myvalue', 'test', 'string')
 mykey2 = Setting('mykey2', 'myvalue2', ['test', 'test2'], 'list')
 mykey3 = Setting('mykey3', 'myvalue3', 11111111111, 'integer')
-
+server_conf_id = Setting('server_conf_id','conf_id', 'staging', 'string')
+server_conf_id1 = Setting('server_conf_id1','conf_id1', 'testing', 'string')
 
 class TestConfigData(unittest.TestCase):
 
@@ -39,3 +40,12 @@ class TestConfigData(unittest.TestCase):
 
         for setting in self.cdata.get_settings():
             self.assertEqual(all_settings[setting.name], setting)
+
+    def test_update_conf_setting(self):
+        for setting in [server_conf_id, server_conf_id]:
+            self.cdata.update_conf_setting(setting)
+            self.assertEqual(setting, self.cdata._global_settings.get(setting.name))
+
+    def test_get_conf_setting(self):
+        self.cdata._global_settings = {'server_conf_id': server_conf_id}
+        self.assertEqual(server_conf_id, self.cdata.get_conf_setting('server_conf_id'))
