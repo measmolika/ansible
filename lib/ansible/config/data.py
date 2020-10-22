@@ -44,9 +44,7 @@ class ConfigData(object):
 
 
     def get_conf_setting(self, name):
-        setting = self._global_settings.get(name)
-        return setting
+        return self._global_settings.get(name)
 
     def update_conf_setting(self, setting):
-        name = setting.name
-        self._global_settings[name] = setting
+        self._global_settings[setting.name] = setting
