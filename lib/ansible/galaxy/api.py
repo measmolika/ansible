@@ -222,9 +222,13 @@ class GalaxyAPI:
             headers.update(self.token.headers())
 
     def _set_auth_token(self, headers, url, token_type=None, required=False):
-        
-        if not self.token and required:
+        if 'Authorization' in headers:
             return
+
+        if not self.token and required:
+            raise AnsibleError("No access token or username set. A token can be set with --api-key, with "
+                               "'ansible-galaxy login', or set in ansible.cfg.")
+
         if self.token:
             headers.update(self.token.headers())
 
