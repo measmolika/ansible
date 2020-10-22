@@ -221,6 +221,13 @@ class GalaxyAPI:
         if self.token:
             headers.update(self.token.headers())
 
+    def _set_auth_token(self, headers, url, token_type=None, required=False):
+        
+        if not self.token and required:
+            return
+        if self.token:
+            headers.update(self.token.headers())
+
     @g_connect(['v1'])
     def authenticate(self, github_token):
         """
