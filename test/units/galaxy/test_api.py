@@ -86,7 +86,6 @@ def test_api_token_auth():
     api._add_auth_token(actual, "", required=True)
     assert actual == {'Authorization': 'Token my_token'}
 
-
 def test_api_token_auth_with_token_type(monkeypatch):
     token = KeycloakToken(auth_url='https://api.test/')
     mock_token_get = MagicMock()
@@ -97,6 +96,12 @@ def test_api_token_auth_with_token_type(monkeypatch):
     api._add_auth_token(actual, "", token_type="Bearer", required=True)
     assert actual == {'Authorization': 'Bearer my_token'}
 
+def test_api_auth_token():
+    token = GalaxyToken(token=u"my_token")
+    api = GalaxyAPI(None, "test", "https://galaxy.ansible.com/api/", token=token)
+    actual = {}
+    api._set_auth_token(actual, "", required=True)
+    assert actual == {'Authorization': 'Token my_token'}
 
 def test_api_token_auth_with_v3_url(monkeypatch):
     token = KeycloakToken(auth_url='https://api.test/')
