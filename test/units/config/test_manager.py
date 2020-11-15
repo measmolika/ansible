@@ -18,6 +18,7 @@ from ansible.parsing.yaml.objects import AnsibleVaultEncryptedUnicode
 curdir = os.path.dirname(__file__)
 cfg_file = os.path.join(curdir, 'test.cfg')
 cfg_file2 = os.path.join(curdir, 'test2.cfg')
+cfg_1 = os.path.join(curdir, 'test_file_1.cfg')
 
 expected_ini = {'CONFIG_FILE': Setting(name='CONFIG_FILE', value=cfg_file, origin='', type='string'),
                 'config_entry': Setting(name='config_entry', value=u'fromini', origin=cfg_file, type='string'),
@@ -155,3 +156,37 @@ class TestConfigManager:
 
         actual_value = ensure_type(vault_var, value_type)
         assert actual_value == "vault text"
+
+    ######################################################
+
+    def test_valid_config_types(self):
+        assert get_config_type('/tmp/ansible.ini') == 'ini'
+        assert get_config_type('/tmp/ansible.cfg') == 'ini'
+        assert get_config_type('/tmp/ansible.yaml') == 'yaml'
+        assert get_config_type('/tmp/ansible.yml') == 'yaml'
+
+    def test_config_types_unsupported(self):
+        with pytest.raises(AnsibleOptionsError) as exec_info:
+            get_config_type('/tmp/ansible.txt')
+        assert "Unsupported configuration file extension for" in str(exec_info.value)
+
+    def test_read_config_yaml_file_missing(self):
+        with pytest.raises(AnsibleError) as exec_info:
+            self.manager._read_config_yaml_file(os.path.join(curdir, 'test_non_existent.yml'))
+
+        assert "Missing base YAML definition file (bad install?)" in str(exec_info.value)
+
+    def test_config_types_missing(self):
+        with pytest.raises(AnsibleOptionsError) as exec_info:
+            get_config_type(None)
+        assert "Configuration file not found."
+
+    def test_value_from_ini(self):
+        assert self.manager.get_config_value('config_entry') == 'fromini'
+
+    @pytest.mark.parametrize("value, expected_type, python_type", ensure_test_data)
+    def test_ensure_python_type(self, value, expected_type, python_type):
+        assert isinstance(ensure_type(value, expected_type), python_type)
+
+    def test_value_and_origin_cfg_1(self):
+        assert self.manager.get_config_value_and_origin('config_entry', cfile=cfg_1) == ('True', cfg_1)
