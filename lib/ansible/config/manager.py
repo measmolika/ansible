@@ -185,6 +185,8 @@ def get_config_type(cfile):
             ftype = 'yaml'
         else:
             raise AnsibleOptionsError("Unsupported configuration file extension for %s: %s" % (cfile, to_native(ext)))
+    else: 
+        raise AnsibleOptionsError("Configuration file not found.")
 
     return ftype
 
